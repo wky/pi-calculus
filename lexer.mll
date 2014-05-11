@@ -1,7 +1,7 @@
 (* lexer.mll *)
 {
 open Parser
-exception Eof
+let sym_table = [("true", Parser.BOOL(true)); ("false", Parser.BOOL(false))];;
 }
 
 let space = [' ' '\t' '\n' '\r']
@@ -44,8 +44,8 @@ rule token = parse
 | "tl" { OP("tl")}
 *)
 
-| digit+ { INT() }
-| lower (lower|upper|digit|'_')* { IDENT() }
+| digit+ { INT(int_of_string (Lexing.lexeme lexbuf)) }
+| lower (lower|upper|digit|'_')* { let s = Lexing.lexeme lexbuf in try List.assoc s sym_table with Not_found -> IDENT(s) }
 | eof { EOF }
 
 | _ { failwith "lex error" }

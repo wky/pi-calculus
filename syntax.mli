@@ -9,7 +9,7 @@ type valexp = Unit
 	| Bool of bool
 	| Int of int
 	| Op of op * valexp
-	(*| Pair of valexp * valexp;;*)
+	| Pair of valexp * valexp;;
 
 type procexp = Zero
 	| Par of procexp * procexp

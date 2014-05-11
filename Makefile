@@ -2,7 +2,7 @@
 SRC = syntax.mli syntax.ml parser.mli parser.ml lexer.ml main.ml
 
 all: $(SRC)
-	ocamlopt -o checker unix.cmxa $(SRC)
+	ocamlfind ocamlopt -linkpkg -package batteries -o checker $(SRC)
 
 parser.mli parser.ml:
 	ocamlyacc parser.mly
@@ -14,7 +14,7 @@ lexer.ml:
 .SUFFIXES: .ml .cmo .mli .cmi
 
 .ml.cmo:
-	ocamlc $(SRC)
+	ocamlfind ocamlc -linkpkg -package batteries $(SRC)
 
 clean:
 	rm *.cmi *.cmx *.o *.cmo parser.ml parser.mli lexer.ml
