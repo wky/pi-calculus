@@ -1,10 +1,22 @@
 (* lexer.mll *)
 {
 open Parser
+open Lexing
 let sym_table = [("true", Parser.BOOL(true)); ("false", Parser.BOOL(false))];;
+
+let next_line lexbuf = 
+	let pos = lexbuf.lex_curr_p in 
+	lexbuf.lex_curr_p <- {
+		pos with pos_bol = lexbuf.lex_curr_pos;
+		pos_lnum = pos.pos_lnum + 1
+	}
+
+let lnum lexbuf = lexbuf.lex_curr_p.pos_lnum
+let cnum lexbuf = lexbuf.lex_curr_p.pos_cnum - lexbuf.lex_curr_p.pos_bol
 }
 
-let space = [' ' '\t' '\n' '\r']
+let space = [' ' '\t' '\r']
+let newline = '\n'
 let digit = ['0'-'9']
 let lower = ['a'-'z']
 let upper = ['A'-'Z']
@@ -12,18 +24,19 @@ let upper = ['A'-'Z']
 
 rule token = parse
 | space+ { token lexbuf }
+| newline { next_line lexbuf; token lexbuf }
 | "/*" { comment lexbuf; token lexbuf }
 
-| "?" { INPUT }
-| "!" { OUTPUT } 
+| "?" { INPUT(lnum lexbuf, cnum lexbuf) }
+| "!" { OUTPUT(lnum lexbuf, cnum lexbuf) } 
 | "|" { PAR } 
 | "*" { REP }
-| "new" { NU }
+| "new" { NU(lnum lexbuf, cnum lexbuf) }
 | "in" { IN }
 | "." { PERIOD }
 | "O" { ZERO }
 
-| "if" { IF }
+| "if" { IF(lnum lexbuf, cnum lexbuf) }
 | "then" { THEN }
 | "else" { ELSE }
 | "==" { EQ }

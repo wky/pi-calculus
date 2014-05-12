@@ -13,8 +13,8 @@ type valexp = Unit
 type procexp = Zero
 	| Par of procexp * procexp
 	| Rep of procexp
-	| Nu of var * procexp
-	| If of valexp * procexp * procexp
-	| In of var * var * procexp
-	| Out of var * valexp * procexp;;
+	| Nu of var * procexp * pos
+	| If of valexp * procexp * procexp * pos
+	| In of var * var * procexp * pos
+	| Out of var * valexp * procexp * pos;;
 

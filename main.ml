@@ -13,10 +13,10 @@ let rec proc_to_str proc :string = match proc with
   Zero -> "Zero"
 | Par(p1, p2) -> "Parallel("^(proc_to_str p1)^", "^(proc_to_str p2)^")"
 | Rep(p) -> "Repeat("^(proc_to_str p)^")"
-| Nu(var, p) -> "New("^var^", "^(proc_to_str p)^")"
-| If(cond, p1, p2) -> "If ["^(value_to_str cond)^" Then "^(proc_to_str p1)^" Else "^(proc_to_str p2)
-| In(chan, var, p) -> "In "^chan^"("^var^")."^(proc_to_str p)
-| Out(chan, value, p) -> "Out "^chan^"("^(value_to_str value)^")."^(proc_to_str p)
+| Nu(var, p, pos) -> "New("^var^", "^(proc_to_str p)^")"
+| If(cond, p1, p2, pos) -> "If ["^(value_to_str cond)^" Then "^(proc_to_str p1)^" Else "^(proc_to_str p2)
+| In(chan, var, p, pos) -> "In["^(string_of_int (fst pos))^","^(string_of_int (snd pos))^"]"^chan^"("^var^")."^(proc_to_str p)
+| Out(chan, value, p, pos) -> "Out["^(string_of_int (fst pos))^","^(string_of_int (snd pos))^"]"^chan^"("^(value_to_str value)^")."^(proc_to_str p)
 
 let show_syntax_error lex_buf = (
 	print_endline ("syntax error at character "^(string_of_int lex_buf.Lexing.lex_curr_p.pos_cnum));
@@ -43,7 +43,7 @@ let main () =
 	let lex_buf = Lexing.from_channel in_strm in
 	let proc = try Parser.main Lexer.token lex_buf 
 		with Failure f -> (show_lexing_error lex_buf f; exit(-1))
-		| Parsing.Parse_error -> ( show_syntax_error lex_buf; exit(-1))
+		| Parsing.Parse_error -> (show_syntax_error lex_buf; exit(-1))
 	in print_string ((proc_to_str proc)^"\n");;
 
 if !Sys.interactive then () else main();;

@@ -6,16 +6,16 @@ open Syntax
 %token <int> INT
 %token <bool> BOOL
 
-%token INPUT
-%token OUTPUT
+%token <Syntax.pos> INPUT
+%token <Syntax.pos> OUTPUT
 %token PAR
 %token REP
-%token NU
+%token <Syntax.pos> NU
 %token IN
 %token PERIOD
 %token ZERO
 
-%token IF
+%token <Syntax.pos> IF
 %token THEN
 %token ELSE
 %token EQ
@@ -68,13 +68,13 @@ value:
 ;
 
 proc: ZERO { Zero }
-| IDENT OUTPUT value PERIOD proc { Out($1, $3, $5) }
-| IDENT INPUT pattern PERIOD proc { In($1, $3, $5) }
+| IDENT OUTPUT value PERIOD proc { Out($1, $3, $5, $2) }
+| IDENT INPUT pattern PERIOD proc { In($1, $3, $5, $2) }
 | proc PAR proc { Par($1, $3) }
 | REP proc { Rep($2) }
 | LPAREN proc RPAREN { $2 }
-| NU IDENT IN proc { Nu($2, $4) }
-| IF value THEN proc ELSE proc { If($2, $4, $6) }
+| NU IDENT IN proc { Nu($2, $4, $1) }
+| IF value THEN proc ELSE proc { If($2, $4, $6, $1) }
 ;
 
 pattern:
