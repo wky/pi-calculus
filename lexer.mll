@@ -48,7 +48,7 @@ rule token = parse
 | lower (lower|upper|digit|'_')* { let s = Lexing.lexeme lexbuf in try List.assoc s sym_table with Not_found -> IDENT(s) }
 | eof { EOF }
 
-| _ { failwith "lex error" }
+| _ { failwith ("unknown token: "^(Lexing.lexeme lexbuf)) }
 
 and comment = parse
 

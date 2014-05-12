@@ -1,6 +1,6 @@
 (* main.ml *)
 open Syntax;;
-
+open Lexing;;
 let rec value_to_str value :string = match value with
   Unit -> "Unit"
 | Var(v) -> v
@@ -18,6 +18,15 @@ let rec proc_to_str proc :string = match proc with
 | In(chan, var, p) -> "In "^chan^"("^var^")."^(proc_to_str p)
 | Out(chan, value, p) -> "Out "^chan^"("^(value_to_str value)^")."^(proc_to_str p)
 
+let show_syntax_error lex_buf = (
+	print_endline ("syntax error at character "^(string_of_int lex_buf.Lexing.lex_curr_p.pos_cnum));
+	print_endline ("re-run with environment variable OCAMLRUNPARAM='p' to reveal errors")
+)
+
+let show_lexing_error lex_buf failure = (
+	print_endline ("lexing error at character "^(string_of_int lex_buf.Lexing.lex_curr_p.pos_cnum));
+	print_endline failure
+)
 
 let main () = 
 	let _ = print_string "Pi-Calculus Type Checker\n" in
@@ -33,7 +42,8 @@ let main () =
 			exit(-1)) in
 	let lex_buf = Lexing.from_channel in_strm in
 	let proc = try Parser.main Lexer.token lex_buf 
-		with exn -> ( print_endline ("error at character "^(string_of_int lex_buf.Lexing.lex_curr_p.pos_cnum)); exit(-1))
+		with Failure f -> (show_lexing_error lex_buf f; exit(-1))
+		| Parsing.Parse_error -> ( show_syntax_error lex_buf; exit(-1))
 	in print_string ((proc_to_str proc)^"\n");;
 
 if !Sys.interactive then () else main();;
