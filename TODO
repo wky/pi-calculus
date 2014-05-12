@@ -1,0 +1,35 @@
+TODO
+
+Step 1
+
+Simple type eleboration
+=====
+
+gather free-variables
+
+alpha-conversion
+	rename all bound-variables
+
+generate constraints
+	traverse syntax tree, annotate nodes with type
+
+unification of constraints
+	as demonstrated in textbooks
+	report mis-uses
+
+substitution in type environment
+
+
+Step 2
+Type system for Deadlock-Freedom
+====
+
+elaborate channel usage
+	traverse syntax tree
+
+annotate channel usage with obligation/capability constraints
+
+reduction of channel usage
+
+solve constraints
+	report dead-locks
