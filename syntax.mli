@@ -1,21 +1,19 @@
 (* syntax.mli *)
-
 type var = string
 type pos = int * int
 type op = string
 
-type valexp = Unit
+type 'ty valexp = Unit
 	| Var of var
 	| Bool of bool
 	| Int of int
-	| Op of op * valexp
-	| Pair of valexp * valexp;;
+	| Op of op * 'ty valexp * 'ty
+	| Pair of 'ty valexp * 'ty valexp;;
 
-type procexp = Zero
-	| Par of procexp * procexp
-	| Rep of procexp
-	| Nu of var * procexp * pos
-	| If of valexp * procexp * procexp * pos
-	| In of var * var * procexp * pos
-	| Out of var * valexp * procexp * pos;;
-
+type 'ty procexp = Zero
+	| Par of 'ty procexp * 'ty procexp
+	| Rep of 'ty procexp
+	| Nu of var * 'ty * 'ty procexp * pos
+	| If of 'ty valexp * 'ty procexp * 'ty procexp * pos
+	| In of var * var * 'ty * 'ty procexp * pos
+	| Out of var * 'ty valexp * 'ty procexp * pos;;

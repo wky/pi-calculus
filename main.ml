@@ -6,16 +6,16 @@ let rec value_to_str value :string = match value with
 | Var(v) -> v
 | Bool(b) -> string_of_bool b
 | Int(i) -> string_of_int i
-| Op(op, v) -> op ^ (value_to_str v)
+| Op(op, v, ty) -> op ^ (value_to_str v)
 | Pair(v1, v2) -> "("^(value_to_str v1)^", "^(value_to_str v2)^")"
 
 let rec proc_to_str proc :string = match proc with 
   Zero -> "Zero"
 | Par(p1, p2) -> "Parallel("^(proc_to_str p1)^", "^(proc_to_str p2)^")"
 | Rep(p) -> "Repeat("^(proc_to_str p)^")"
-| Nu(var, p, pos) -> "New("^var^", "^(proc_to_str p)^")"
+| Nu(var, ty,p, pos) -> "New("^var^", "^(proc_to_str p)^")"
 | If(cond, p1, p2, pos) -> "If ["^(value_to_str cond)^" Then "^(proc_to_str p1)^" Else "^(proc_to_str p2)
-| In(chan, var, p, pos) -> "In["^(string_of_int (fst pos))^","^(string_of_int (snd pos))^"]"^chan^"("^var^")."^(proc_to_str p)
+| In(chan, var, ty, p, pos) -> "In["^(string_of_int (fst pos))^","^(string_of_int (snd pos))^"]"^chan^"("^var^")."^(proc_to_str p)
 | Out(chan, value, p, pos) -> "Out["^(string_of_int (fst pos))^","^(string_of_int (snd pos))^"]"^chan^"("^(value_to_str value)^")."^(proc_to_str p)
 
 let show_syntax_error lex_buf = (

@@ -45,8 +45,8 @@ open Syntax
 %left PLUS MINUS
 
 %start main
-%type <Syntax.procexp> main
-%type <Syntax.valexp> value
+%type <unit Syntax.procexp> main /*no type attatched yet*/
+%type <unit Syntax.valexp> value
 %type <string> pattern
 %%
 
@@ -60,20 +60,20 @@ value:
 | BOOL { Bool($1) }
 | INT { Int($1) }
 /*| NIL { Prim("nil", Unit) }*/
-| value PLUS value { Op("+", Pair($1, $3)) }
-| value MINUS value { Op("-", Pair($1, $3)) }
-| value EQ value { Op("==", Pair($1, $3)) }
-| value GT value { Op(">", Pair($1, $3)) }
+| value PLUS value { Op("+", Pair($1, $3), ()) }
+| value MINUS value { Op("-", Pair($1, $3), ()) }
+| value EQ value { Op("==", Pair($1, $3), ()) }
+| value GT value { Op(">", Pair($1, $3), ()) }
 | LPAREN value RPAREN { $2 }
 ;
 
 proc: ZERO { Zero }
 | IDENT OUTPUT value PERIOD proc { Out($1, $3, $5, $2) }
-| IDENT INPUT pattern PERIOD proc { In($1, $3, $5, $2) }
+| IDENT INPUT pattern PERIOD proc { In($1, $3, (), $5, $2) }
 | proc PAR proc { Par($1, $3) }
 | REP proc { Rep($2) }
 | LPAREN proc RPAREN { $2 }
-| NU IDENT IN proc { Nu($2, $4, $1) }
+| NU IDENT IN proc { Nu($2, (), $4, $1) }
 | IF value THEN proc ELSE proc { If($2, $4, $6, $1) }
 ;
 
