@@ -39,23 +39,21 @@ rule token = parse
 | "if" { IF(lnum lexbuf, cnum lexbuf) }
 | "then" { THEN }
 | "else" { ELSE }
-| "==" { EQ }
-| ">" { GT }
+| "==" { EQ(lnum lexbuf, cnum lexbuf) }
+| ">" { GT(lnum lexbuf, cnum lexbuf) }
 
 | "(" { LPAREN }
 | ")" { RPAREN }
 | "," { COMMA }
 
-| "+" { PLUS }
-| "-" { MINUS }
+| "+" { PLUS(lnum lexbuf, cnum lexbuf) }
+| "-" { MINUS(lnum lexbuf, cnum lexbuf) }
 
-(*
-| "nil" { NIL }
-| "isnil" { OP("isnil")}
-| "cons" { OP("cons") }
-| "hd" { OP("hd") }
-| "tl" { OP("tl")}
-*)
+| "nil" { NIL(lnum lexbuf, cnum lexbuf) }
+| "isnil" { OP("isnil", (lnum lexbuf, cnum lexbuf))}
+| "cons" { OP("cons", (lnum lexbuf, cnum lexbuf)) }
+| "hd" { OP("hd", (lnum lexbuf, cnum lexbuf)) }
+| "tl" { OP("tl", (lnum lexbuf, cnum lexbuf))}
 
 | digit+ { INT(int_of_string (Lexing.lexeme lexbuf)) }
 | lower (lower|upper|digit|'_')* { let s = Lexing.lexeme lexbuf in try List.assoc s sym_table with Not_found -> IDENT(s) }

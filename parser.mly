@@ -18,21 +18,19 @@ open Syntax
 %token <Syntax.pos> IF
 %token THEN
 %token ELSE
-%token EQ
-%token GT
+%token <Syntax.pos> EQ
+%token <Syntax.pos> GT
 
 %token LPAREN
 %token RPAREN
 %token COMMA
 
-%token PLUS
-%token MINUS
+%token <Syntax.pos> PLUS
+%token <Syntax.pos> MINUS
 
-%token NIL
+%token <Syntax.pos> NIL
 %token EOF
-/*
-%token <string> PRIM
-*/
+%token <string * Syntax.pos> OP
 
 %nonassoc IN
 %left PAR
@@ -47,7 +45,7 @@ open Syntax
 %start main
 %type <unit Syntax.procexp> main /*no type attatched yet*/
 %type <unit Syntax.valexp> value
-%type <string> pattern
+
 %%
 
 main:
@@ -59,24 +57,23 @@ value:
 | LPAREN RPAREN { Unit }
 | BOOL { Bool($1) }
 | INT { Int($1) }
-/*| NIL { Prim("nil", Unit) }*/
-| value PLUS value { Op("+", Pair($1, $3), ()) }
-| value MINUS value { Op("-", Pair($1, $3), ()) }
-| value EQ value { Op("==", Pair($1, $3), ()) }
-| value GT value { Op(">", Pair($1, $3), ()) }
+/* solve function-as-value and multiple-argument problems first*/
+| OP { failwith("Operation '" ^ (fst $1) ^ "' not supported yet") }
+| value PLUS value { App(Op("+", (), $2), Pair($1, $3)) }
+| value MINUS value { App(Op("-", (), $2), Pair($1, $3)) }
+| value EQ value { App(Op("==", (), $2), Pair($1, $3)) }
+| value GT value { App(Op(">", (), $2), Pair($1, $3)) }
 | LPAREN value RPAREN { $2 }
+/*| NIL { Op("nil", (), $1) }*/
 ;
 
-proc: ZERO { Zero }
-| IDENT OUTPUT value PERIOD proc { Out($1, $3, $5, $2) }
-| IDENT INPUT pattern PERIOD proc { In($1, $3, (), $5, $2) }
+proc: 
+  ZERO { Zero }
 | proc PAR proc { Par($1, $3) }
 | REP proc { Rep($2) }
 | LPAREN proc RPAREN { $2 }
 | NU IDENT IN proc { Nu($2, (), $4, $1) }
 | IF value THEN proc ELSE proc { If($2, $4, $6, $1) }
-;
-
-pattern:
-  IDENT { $1 }
+| IDENT INPUT IDENT PERIOD proc { In($1, $3, (), $5, $2) }
+| IDENT OUTPUT value PERIOD proc { Out($1, $3, $5, $2) }
 ;

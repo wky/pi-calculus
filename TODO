@@ -5,12 +5,12 @@ Step 1
 Simple type eleboration
 =====
 
-gather free-variables
+gather free-variables *DONE*
 
-alpha-conversion
+alpha-conversion *DONE*
 	rename all bound-variables
 
-generate constraints
+generate constraints *ALMOST DONE*
 	traverse syntax tree, annotate nodes with type
 
 unification of constraints

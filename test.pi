@@ -1,4 +1,4 @@
-new x in (x!0.O |  
+new x in (x!0.O| system!(1+2+3+4).O |  
 new y in 
 *(x?n.y!n+1.O|
 y?n.x!n+1.O))
