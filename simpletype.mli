@@ -21,7 +21,11 @@ type stype = (* Simple type *)
 	| FuncT of stype * stype (* function type: from -> to *)
 
 type tenv = (var * stype) list
-
 type constraints = (stype * stype) list
+exception Unification of string
 
-val type_inf: 'a procexp -> tenv -> stype procexp * constraints
+(* val new_tvar: unit -> stype
+val type_inf: 'a procexp -> tenv -> stype procexp * constraints *)
+
+val elaborate: unit procexp -> stype procexp * tenv
+val string_of_type: stype -> string

@@ -21,5 +21,7 @@ type 'ty procexp = (* Expression of Processes annotated with type 'ty *)
 	| In of var * var * 'ty * 'ty procexp * pos 	(* Input from channel, bind value to variable with type *)
 	| Out of var * 'ty valexp * 'ty procexp * pos 	(* Output to channel, with value *)
 
-val alphaconv_proc: 'a procexp -> 'a procexp
-val fvlist_proc: 'a procexp -> var list
+val alphaconversion: 'a procexp -> 'a procexp
+val freevars: 'a procexp -> var list
+val map_type: ('a -> 'a) -> 'a procexp -> 'a procexp
+val string_of_proc: ('a -> string) -> 'a procexp -> string

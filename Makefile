@@ -1,8 +1,8 @@
 #Makefile for pi-calculus
-SRC = syntax.mli syntax.ml simpletype.ml parser.mli parser.ml lexer.ml main.ml
+SRC = syntax.mli syntax.ml simpletype.mli simpletype.ml parser.mli parser.ml lexer.ml main.ml
 
-all: $(SRC)
-	ocamlopt -o checker $(SRC)
+all: clean $(SRC)
+	ocamlc -w A-4 -g -o checker $(SRC)
 
 parser.mli parser.ml:
 	ocamlyacc parser.mly
@@ -10,11 +10,5 @@ parser.mli parser.ml:
 lexer.ml:
 	ocamllex lexer.mll
 
-
-.SUFFIXES: .ml .cmo .mli .cmi
-
-.ml.cmo:
-	ocamlc $(SRC)
-
 clean:
-	rm *.cmi *.cmx *.o *.cmo parser.ml parser.mli lexer.ml
+	rm -f *.cmi *.cmx *.o *.cmo parser.ml parser.mli lexer.ml
