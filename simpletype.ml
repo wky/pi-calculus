@@ -109,7 +109,7 @@ let unification c =
 		if t1 = t2 then unify c1 s else match (t1, t2) with
 		  (TVar x, _) -> if occurs x t2 then raise (Unification "recursive type?") else
 			let s1 = [(x, t2)] in
-			let trans = fun (t1, t2) -> (type_subst s t1, type_subst s t2) in
+			let trans = fun (t1, t2) -> (type_subst s1 t1, type_subst s1 t2) in
 			let c1' = List.map trans c1 in
 				unify c1' (s1 @ s)
 		| (_, TVar _) -> unify ((t2, t1)::c1) s (* change order *)
@@ -123,7 +123,7 @@ let unification c =
 		| PairT(t1, t2) -> (occurs x t1) || (occurs x t2)
 		| FuncT(t1, t2) -> (occurs x t1) || (occurs x t2)
 		| _ -> false
-	in unify c []
+	in List.rev(unify c [])
 
 (* unit procexp -> stype procexp * tenv *)
 let elaborate p =
