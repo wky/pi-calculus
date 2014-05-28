@@ -1,0 +1,2 @@
+new x in ( x?b . x!b .O |
+           x?a . x!a .O )

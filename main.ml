@@ -32,8 +32,16 @@ let main () =
 	let (p'', env) = Simpletype.elaborate p' in
 	let t2s = Simpletype.string_of_type in
 	let proc_str = string_of_proc t2s p'' in
-	let print_fv = fun (fv, ty) -> print_endline (fv^":"^(t2s ty))
-in (print_endline proc_str; List.iter print_fv env);;
+	let print_fv = fun (fv, ty) -> print_endline (fv^":"^(t2s ty)) in
+	let _ = (print_endline proc_str; List.iter print_fv env) in
+	let (cenv, cons) = Complextype.elaborate p'' in
+	let u2s = Complextype.string_of_usage in
+	let c2s = Complextype.string_of_constraint in
+	let print_cenv (x, u) = print_endline (x^":"^(u2s u)) in
+	let _ = print_endline "" in
+	let _ = List.iter print_cenv cenv in
+	let _ = print_endline "Constraints:" in
+	let _ = List.iter (fun c -> print_endline (c2s c)) cons in ();;
 
 if !Sys.interactive then () else 
 	try (

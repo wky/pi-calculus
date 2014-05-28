@@ -1,0 +1,5 @@
+new x in (
+	new y in (
+		x!y . y!1 . x?z .O |
+		x?t . t?a . x!t .O
+	))

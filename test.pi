@@ -1,6 +1,17 @@
+/*
 new x in (x!0.O| system!(1+2+3+4).O |  
 new y in 
 *(x?n.y!n+1.O|
 y?n.x!n+1.O))
 
-/*new x in x!0.system!x.O*/
+new x in x!0.system!x.O
+
+
+
+new x in new c in x!c.c?n.O
+
+new x  in (new y in x!y . y ? n.O| x?c.c!1.O)
+
+new x in new y in (x?n.y!n+1.O|x!1.y?n.O)*/
+
+new x in new y in (x?n.y!n+1.O | y?m.x!m-1.O)

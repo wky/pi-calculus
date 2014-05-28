@@ -1,0 +1,5 @@
+new x in ( x!0 . x?a . x!1 .O |
+           x!2 . x?b . x!3 .O |
+           x!4 . x?c . x?d .O |
+           x?e . x!5 . x?f .O )
+/* Rarely it'll go to a dead-lock state: x?a.x!1.O | x?b.x!3.O | O | O */

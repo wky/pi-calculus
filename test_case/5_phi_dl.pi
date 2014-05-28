@@ -1,0 +1,17 @@
+new fork1 in (
+	new fork2 in (
+		new fork3 in (
+			new fork4 in (
+				new fork5 in (
+					/*init*/ fork1!1 .O |
+					         fork2!2 .O |
+					         fork3!3 .O |
+					         fork4!4 .O |
+					         fork5!5 .O | *(
+					/*phi1*/ fork1?p . fork2?q . print!p+q . fork1!p . fork2!q .O |
+					/*phi2*/ fork2?p . fork3?q . print!p+q . fork2!p . fork3!q .O |
+					/*phi3*/ fork3?p . fork4?q . print!p+q . fork3!p . fork4!q .O |
+					/*phi4*/ fork4?p . fork5?q . print!p+q . fork4!p . fork5!q .O |
+					/*phi5*/ fork5?p . fork1?q . print!p+q . fork1!p . fork5!q .O )
+)))))
+/* There may be a dead-lock when each philosopher holds its left fork. */
